@@ -2,6 +2,7 @@ package com.trustpay.backend.services.impl;
 
 import com.trustpay.backend.entity.User;
 import com.trustpay.backend.enums.AccountStatus;
+import com.trustpay.backend.enums.Role;
 import com.trustpay.backend.exception.EmailAlreadyExistsException;
 import com.trustpay.backend.repository.UserRepository;
 import com.trustpay.backend.security.JwtService;
@@ -38,6 +39,7 @@ public class AuthServiceImpl implements AuthService {
                 user.getEmail(),
                 Map.of(
                         "userId", user.getId().toString(),
+                        "role", user.getRole().name(),
                         "status", user.getStatus().name()
                 )
         );
@@ -56,6 +58,7 @@ public class AuthServiceImpl implements AuthService {
                 .balance(BigDecimal.ZERO)
                 .outstandingBalance(BigDecimal.ZERO)
                 .status(AccountStatus.ACTIVE)
+                .role(Role.USER)
                 .build();
 
         userRepository.save(user);
@@ -64,8 +67,10 @@ public class AuthServiceImpl implements AuthService {
                 user.getEmail(),
                 Map.of(
                         "userId", user.getId().toString(),
+                        "role", user.getRole().name(),
                         "status", user.getStatus().name()
                 )
         );
     }
+
 }
