@@ -34,7 +34,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 true,
                 true,
                 user.getStatus() != AccountStatus.BLOCKED,
-                List.of(new SimpleGrantedAuthority("ROLE_USER"))
+                List.of(
+                        new SimpleGrantedAuthority("ROLE_" + user.getRole().name())
+                )
         );
     }
 }
