@@ -1,6 +1,7 @@
     package com.trustpay.backend.entity;
 
     import com.trustpay.backend.enums.AccountStatus;
+    import com.trustpay.backend.enums.Role;
     import jakarta.persistence.*;
     import jakarta.validation.constraints.Email;
     import jakarta.validation.constraints.NotBlank;
@@ -45,4 +46,9 @@
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AccountStatus status;
-}
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
+    }
