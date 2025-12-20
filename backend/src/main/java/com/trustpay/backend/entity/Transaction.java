@@ -1,5 +1,6 @@
 package com.trustpay.backend.entity;
 
+import com.trustpay.backend.enums.PaymentMethodType;
 import com.trustpay.backend.enums.TransactionStatus;
 import com.trustpay.backend.enums.TransactionType;
 import jakarta.persistence.*;
@@ -45,4 +46,11 @@ public class Transaction {
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
+
+    @Enumerated(EnumType.STRING)
+    private PaymentMethodType paymentMethod;
+
+    private String description;
+
+    private UUID referenceId;
 }
