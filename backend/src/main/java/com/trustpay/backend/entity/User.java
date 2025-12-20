@@ -41,7 +41,7 @@
     private BigDecimal balance;
 
     @Column(nullable = false)
-    private BigDecimal outstandingBalance;
+    private BigDecimal outstandingBalance = BigDecimal.ZERO;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
