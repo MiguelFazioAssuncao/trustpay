@@ -2,5 +2,7 @@ package com.trustpay.backend.enums;
 
 public enum TransactionType {
     DEPOSIT,
-    TRANSFER
+    TRANSFER,
+    STORE_PURCHASE,
+    REFUND
 }
