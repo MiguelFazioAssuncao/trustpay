@@ -2,6 +2,7 @@ package com.trustpay.backend.services;
 
 import com.trustpay.backend.entity.Transaction;
 import com.trustpay.backend.entity.User;
+import com.trustpay.backend.enums.PaymentMethodType;
 import com.trustpay.backend.enums.TransactionStatus;
 import com.trustpay.backend.enums.TransactionType;
 import com.trustpay.backend.exception.InsufficientBalanceException;
@@ -48,7 +49,9 @@ public class TransactionService {
                 .toUser(to)
                 .amount(amount)
                 .type(TransactionType.TRANSFER)
+                .paymentMethod(PaymentMethodType.ACCOUNT_BALANCE)
                 .status(TransactionStatus.COMPLETED)
+                .description("Transfer to user " + to.getEmail())
                 .createdAt(LocalDateTime.now())
                 .build();
 
