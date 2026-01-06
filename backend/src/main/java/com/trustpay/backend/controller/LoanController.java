@@ -1,5 +1,6 @@
 package com.trustpay.backend.controller;
 
+import com.trustpay.backend.dto.response.LoanResponse;
 import com.trustpay.backend.entity.Company;
 import com.trustpay.backend.entity.Loan;
 import com.trustpay.backend.entity.User;
@@ -37,18 +38,15 @@ public class LoanController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<Loan> createLoan(
+    public ResponseEntity<LoanResponse> createLoan(
             @RequestParam UUID companyId,
             @RequestParam BigDecimal amount,
             @RequestParam int installments,
             Authentication auth
     ) {
-        System.out.println("AUTH NAME = " + auth.getName());
-        System.out.println("AUTH CLASS = " + auth.getPrincipal().getClass());
-
         User user = userRepository.findByEmail(auth.getName()).orElseThrow();
         Loan loan = loanService.createLoan(user, companyId, amount, installments);
-        return ResponseEntity.ok(loan);
+        return ResponseEntity.ok(LoanResponse.fromEntity(loan));
     }
 
 

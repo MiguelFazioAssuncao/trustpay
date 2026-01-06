@@ -1,7 +1,7 @@
 package com.trustpay.backend.controller;
 
 import com.trustpay.backend.dto.TransferRequest;
-import com.trustpay.backend.entity.Transaction;
+import com.trustpay.backend.dto.response.TransactionResponse;
 import com.trustpay.backend.entity.User;
 import com.trustpay.backend.repository.TransactionRepository;
 import com.trustpay.backend.repository.UserRepository;
@@ -21,7 +21,6 @@ import java.util.List;
 public class TransactionController {
 
     private final TransactionService service;
-
     private final UserRepository userRepository;
     private final TransactionRepository transactionRepository;
 
@@ -37,12 +36,13 @@ public class TransactionController {
         return ResponseEntity.ok().build();
     }
 
-
     @GetMapping("/my")
-    public List<Transaction> myTransactions(Authentication auth) {
+    public List<TransactionResponse> myTransactions(Authentication auth) {
         String email = auth.getName();
         User user = userRepository.findByEmail(email).orElseThrow();
 
-        return transactionRepository.findByFromUserOrToUser(user, user);
+        return transactionRepository.findByFromUserOrToUser(user, user).stream()
+                .map(TransactionResponse::fromEntity)
+                .toList();
     }
 }

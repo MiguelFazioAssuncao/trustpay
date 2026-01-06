@@ -2,13 +2,15 @@ package com.trustpay.backend.controller;
 
 import com.trustpay.backend.dto.auth.LoginRequest;
 import com.trustpay.backend.dto.auth.RegisterRequest;
+import com.trustpay.backend.dto.response.AuthResponse;
+import com.trustpay.backend.dto.response.UserResponse;
+import com.trustpay.backend.entity.User;
+import com.trustpay.backend.repository.UserRepository;
 import com.trustpay.backend.services.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -16,9 +18,10 @@ import java.util.Map;
 public class AuthController {
 
     private final AuthService authService;
+    private final UserRepository userRepository;
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(
+    public ResponseEntity<AuthResponse> login(
             @Valid @RequestBody LoginRequest loginRequest
     ) {
         String token = authService.login(
@@ -26,16 +29,19 @@ public class AuthController {
                 loginRequest.password()
         );
 
+        User user = userRepository.findByEmail(loginRequest.email()).orElseThrow();
+
         return ResponseEntity.ok(
-                Map.of(
-                        "token", token,
-                        "message", "Login successful"
+                new AuthResponse(
+                        token,
+                        "Login successful",
+                        UserResponse.fromEntity(user)
                 )
         );
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Map<String, String>> register(
+    public ResponseEntity<AuthResponse> register(
             @Valid @RequestBody RegisterRequest registerRequest
     ) {
         String token = authService.register(
@@ -43,10 +49,13 @@ public class AuthController {
                 registerRequest.password()
         );
 
+        User user = userRepository.findByEmail(registerRequest.email()).orElseThrow();
+
         return ResponseEntity.ok(
-                Map.of(
-                        "token", token,
-                        "message", "User registered successfully"
+                new AuthResponse(
+                        token,
+                        "User registered successfully",
+                        UserResponse.fromEntity(user)
                 )
         );
     }

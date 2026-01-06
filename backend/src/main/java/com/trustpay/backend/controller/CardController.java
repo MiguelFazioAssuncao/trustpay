@@ -1,6 +1,7 @@
 package com.trustpay.backend.controller;
 
 import com.trustpay.backend.dto.CreateCardRequest;
+import com.trustpay.backend.dto.response.CardResponse;
 import com.trustpay.backend.entity.Card;
 import com.trustpay.backend.entity.User;
 import com.trustpay.backend.repository.CardRepository;
@@ -26,14 +27,17 @@ public class CardController {
     private final UserRepository userRepository;
 
     @PostMapping
-    public ResponseEntity<Card> create(@RequestBody @Valid CreateCardRequest request, Authentication auth) {
+    public ResponseEntity<CardResponse> create(@RequestBody @Valid CreateCardRequest request, Authentication auth) {
         User user = userRepository.findByEmail(auth.getName()).orElseThrow();
-        return ResponseEntity.ok(cardService.create(user, request));
+        Card card = cardService.create(user, request);
+        return ResponseEntity.ok(CardResponse.fromEntity(card));
     }
 
     @GetMapping
-    public List<Card> myCards(Authentication auth) {
+    public List<CardResponse> myCards(Authentication auth) {
         User user = userRepository.findByEmail(auth.getName()).orElseThrow();
-        return cardRepository.findByUser(user);
+        return cardRepository.findByUser(user).stream()
+                .map(CardResponse::fromEntity)
+                .toList();
     }
 }
