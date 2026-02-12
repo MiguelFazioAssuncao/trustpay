@@ -1,101 +1,101 @@
 # 🏦 TrustPay - Digital Banking API
 
-TrustPay é uma API RESTful completa para um sistema de banking digital, desenvolvida com Spring Boot. O sistema oferece funcionalidades de gestão de contas, transações, cartões, empréstimos e uma loja virtual integrada.
+TrustPay is a complete RESTful API for a digital banking system, built with Spring Boot. The system provides account management, transactions, cards, loans, and an integrated online store.
 
-## 📋 Índice
+## 📋 Table of Contents
 
-- [Tecnologias Utilizadas](#tecnologias-utilizadas)
-- [Funcionalidades](#funcionalidades)
-- [Pré-requisitos](#pré-requisitos)
-- [Instalação e Configuração](#instalação-e-configuração)
-- [Variáveis de Ambiente](#variáveis-de-ambiente)
-- [Executando o Projeto](#executando-o-projeto)
-- [Documentação da API](#documentação-da-api)
-- [Estrutura do Projeto](#estrutura-do-projeto)
-- [Padrões de Projeto](#padrões-de-projeto)
+- [Technologies Used](#technologies-used)
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Installation and Setup](#installation-and-setup)
+- [Environment Variables](#environment-variables)
+- [Running the Project](#running-the-project)
+- [API Documentation](#api-documentation)
+- [Project Structure](#project-structure)
+- [Design Patterns](#design-patterns)
 
-## 🚀 Tecnologias Utilizadas
+## 🚀 Technologies Used
 
-- **Java 21** - Linguagem de programação
-- **Spring Boot 4.0.0** - Framework principal
-- **Spring Security** - Autenticação e autorização
-- **Spring Data JPA** - Persistência de dados
-- **PostgreSQL** - Banco de dados relacional
-- **JWT (JSON Web Tokens)** - Autenticação stateless
-- **Lombok** - Redução de boilerplate code
-- **Maven** - Gerenciamento de dependências
-- **Bean Validation** - Validação de dados
+- **Java 21** - Programming language
+- **Spring Boot 4.0.0** - Main framework
+- **Spring Security** - Authentication and authorization
+- **Spring Data JPA** - Data persistence
+- **PostgreSQL** - Relational database
+- **JWT (JSON Web Tokens)** - Stateless authentication
+- **Lombok** - Boilerplate reduction
+- **Maven** - Dependency management
+- **Bean Validation** - Data validation
 
-## ✨ Funcionalidades
+## ✨ Features
 
-### Autenticação e Autorização
-- ✅ Registro de usuários
-- ✅ Login com JWT
-- ✅ Controle de acesso baseado em roles (USER, ADMIN)
+### Authentication and Authorization
+- ✅ User registration
+- ✅ JWT login
+- ✅ Role-based access control (USER, ADMIN)
 
-### Gestão de Usuários
-- ✅ Visualização de saldo e informações da conta
-- ✅ Promoção de usuários para admin (apenas admins)
+### User Management
+- ✅ View account balance and details
+- ✅ Promote users to admin (admins only)
 
-### Transações
-- ✅ Transferências entre usuários
-- ✅ Depósitos (apenas admins)
-- ✅ Histórico de transações
+### Transactions
+- ✅ Transfers between users
+- ✅ Deposits (admins only)
+- ✅ Transaction history
 
-### Cartões
-- ✅ Criação de cartões virtuais
-- ✅ Listagem de cartões do usuário
-- ✅ Mascaramento de números de cartão nas respostas
+### Cards
+- ✅ Create virtual cards
+- ✅ List user cards
+- ✅ Mask card numbers in responses
 
-### Empréstimos
-- ✅ Solicitação de empréstimos com empresas parceiras
-- ✅ Sistema de parcelas
-- ✅ Pagamento de parcelas
-- ✅ Cadastro de empresas parceiras (apenas admins)
+### Loans
+- ✅ Loan requests with partner companies
+- ✅ Installment system
+- ✅ Installment payments
+- ✅ Register partner companies (admins only)
 
-### Loja Virtual
-- ✅ Listagem de produtos
-- ✅ Checkout com diferentes métodos de pagamento
-- ✅ Histórico de pedidos
-- ✅ Cadastro de produtos (apenas admins)
-- ✅ Controle de estoque
+### Online Store
+- ✅ Product listing
+- ✅ Checkout with multiple payment methods
+- ✅ Order history
+- ✅ Product creation (admins only)
+- ✅ Inventory control
 
-## 📦 Pré-requisitos
+## 📦 Prerequisites
 
-- Java 21 ou superior
-- PostgreSQL 12 ou superior
-- Maven 3.6 ou superior
-- Git (opcional)
+- Java 21 or higher
+- PostgreSQL 12 or higher
+- Maven 3.6 or higher
+- Git (optional)
 
-## ⚙️ Instalação e Configuração
+## ⚙️ Installation and Setup
 
-### 1. Clone o repositório
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/MiguelFazioAssuncao/trustpay.git
 cd trustpay/backend
 ```
 
-### 2. Configure o banco de dados PostgreSQL
+### 2. Configure the PostgreSQL database
 
-Crie um banco de dados no PostgreSQL:
+Create a database in PostgreSQL:
 
 ```sql
 CREATE DATABASE trustpay;
 ```
 
-### 3. Configure as variáveis de ambiente
+### 3. Configure environment variables
 
-Crie um arquivo `.env` na raiz do projeto ou configure as variáveis de ambiente no seu sistema:
+Create a `.env` file in the project root or set the variables in your system:
 
 ```bash
 # Database
 DATABASE_URL=jdbc:postgresql://localhost:5432/trustpay
 DATABASE_USERNAME=postgres
-DATABASE_PASSWORD=sua_senha
+DATABASE_PASSWORD=your_password
 
 # JWT
-JWT_SECRET=sua_chave_secreta_jwt_muito_segura_aqui
+JWT_SECRET=your_very_secure_jwt_secret_here
 JWT_EXPIRATION=86400000
 
 # Admin
@@ -107,71 +107,71 @@ SERVER_PORT=8080
 LOG_LEVEL=INFO
 ```
 
-## 🔐 Variáveis de Ambiente
+## 🔐 Environment Variables
 
-| Variável | Descrição | Valor Padrão |
-|----------|-----------|--------------|
-| DATABASE_URL | URL de conexão do PostgreSQL | jdbc:postgresql://localhost:5432/trustpay |
-| DATABASE_USERNAME | Usuário do banco de dados | postgres |
-| DATABASE_PASSWORD | Senha do banco de dados | postgres |
-| JWT_SECRET | Chave secreta para geração de tokens JWT | (valor padrão inseguro) |
-| JWT_EXPIRATION | Tempo de expiração do token em ms | 86400000 (24h) |
-| ADMIN_EMAIL | Email do usuário admin inicial | admin@trustpay.com |
-| ADMIN_PASSWORD | Senha do usuário admin inicial | admin123 |
-| SERVER_PORT | Porta do servidor | 8080 |
-| LOG_LEVEL | Nível de log da aplicação | INFO |
+| Variable | Description | Default Value |
+|----------|-------------|---------------|
+| DATABASE_URL | PostgreSQL connection URL | jdbc:postgresql://localhost:5432/trustpay |
+| DATABASE_USERNAME | Database user | postgres |
+| DATABASE_PASSWORD | Database password | postgres |
+| JWT_SECRET | Secret key for JWT token generation | (unsafe default value) |
+| JWT_EXPIRATION | Token expiration time in ms | 86400000 (24h) |
+| ADMIN_EMAIL | Initial admin user email | admin@trustpay.com |
+| ADMIN_PASSWORD | Initial admin user password | admin123 |
+| SERVER_PORT | Server port | 8080 |
+| LOG_LEVEL | Application log level | INFO |
 
-## 🏃 Executando o Projeto
+## 🏃 Running the Project
 
-### Modo Development
+### Development Mode
 
 ```bash
-# Compilar e executar
+# Build and run
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
 
-# Ou usar o Maven instalado
+# Or use installed Maven
 mvn spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
-### Modo Production
+### Production Mode
 
 ```bash
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=prod
 ```
 
-### Build do projeto
+### Build the project
 
 ```bash
-# Gerar o JAR
+# Generate the JAR
 ./mvnw clean package
 
-# Executar o JAR gerado
+# Run the generated JAR
 java -jar target/backend-0.0.1-SNAPSHOT.jar
 ```
 
-A aplicação estará disponível em: `http://localhost:8080`
+The application will be available at: `http://localhost:8080`
 
-## 📚 Documentação da API
+## 📚 API Documentation
 
 ### Base URL
 ```
 http://localhost:8080
 ```
 
-### Autenticação
+### Authentication
 
-Todos os endpoints, exceto `/auth/**`, requerem autenticação via JWT Bearer Token.
+All endpoints except `/auth/**` require JWT Bearer Token authentication.
 
-**Header de Autenticação:**
+**Authentication Header:**
 ```
-Authorization: Bearer {seu_token_jwt}
+Authorization: Bearer {your_jwt_token}
 ```
 
 ---
 
-## 🔑 Endpoints de Autenticação
+## 🔑 Authentication Endpoints
 
-### Registrar Usuário
+### Register User
 ```http
 POST /auth/register
 ```
@@ -180,7 +180,7 @@ POST /auth/register
 ```json
 {
   "email": "user@example.com",
-  "password": "senha123"
+  "password": "password123"
 }
 ```
 
@@ -209,7 +209,7 @@ POST /auth/login
 ```json
 {
   "email": "user@example.com",
-  "password": "senha123"
+  "password": "password123"
 }
 ```
 
@@ -231,11 +231,11 @@ POST /auth/login
 
 ---
 
-## 💳 Endpoints de Cartões
+## 💳 Card Endpoints
 
-**Requer:** Role `USER`
+**Requires:** Role `USER`
 
-### Criar Cartão
+### Create Card
 ```http
 POST /cards
 ```
@@ -259,7 +259,7 @@ POST /cards
 }
 ```
 
-### Listar Meus Cartões
+### List My Cards
 ```http
 GET /cards
 ```
@@ -278,11 +278,11 @@ GET /cards
 
 ---
 
-## 💰 Endpoints de Transações
+## 💰 Transaction Endpoints
 
-**Requer:** Role `USER` ou `ADMIN`
+**Requires:** Role `USER` or `ADMIN`
 
-### Transferir Dinheiro
+### Transfer Money
 ```http
 POST /transactions/transfer
 ```
@@ -290,14 +290,14 @@ POST /transactions/transfer
 **Request Body:**
 ```json
 {
-  "toUserId": "uuid-do-destinatario",
+  "toUserId": "recipient_uuid",
   "amount": 100.00
 }
 ```
 
 **Response:** `200 OK`
 
-### Listar Minhas Transações
+### List My Transactions
 ```http
 GET /transactions/my
 ```
@@ -319,9 +319,9 @@ GET /transactions/my
 
 ---
 
-## 🏪 Endpoints de Produtos
+## 🏪 Product Endpoints
 
-### Listar Produtos
+### List Products
 ```http
 GET /products
 ```
@@ -331,15 +331,15 @@ GET /products
 [
   {
     "id": "uuid",
-    "name": "Produto Exemplo",
+    "name": "Sample Product",
     "price": 50.00,
     "stock": 100
   }
 ]
 ```
 
-### Criar Produto
-**Requer:** Role `ADMIN`
+### Create Product
+**Requires:** Role `ADMIN`
 
 ```http
 POST /products
@@ -348,7 +348,7 @@ POST /products
 **Request Body:**
 ```json
 {
-  "name": "Novo Produto",
+  "name": "New Product",
   "price": 75.00,
   "stock": 50
 }
@@ -358,7 +358,7 @@ POST /products
 ```json
 {
   "id": "uuid",
-  "name": "Novo Produto",
+  "name": "New Product",
   "price": 75.00,
   "stock": 50
 }
@@ -366,11 +366,11 @@ POST /products
 
 ---
 
-## 🛒 Endpoints da Loja
+## 🛒 Store Endpoints
 
-**Requer:** Role `USER` ou `ADMIN`
+**Requires:** Role `USER` or `ADMIN`
 
-### Fazer Checkout
+### Checkout
 ```http
 POST /store/checkout
 ```
@@ -380,7 +380,7 @@ POST /store/checkout
 {
   "products": [
     {
-      "productId": "uuid-do-produto",
+      "productId": "product_uuid",
       "quantity": 2
     }
   ],
@@ -392,7 +392,7 @@ POST /store/checkout
 
 **Response:** `200 OK`
 
-### Listar Meus Pedidos
+### List My Orders
 ```http
 GET /store/my-orders
 ```
@@ -406,7 +406,7 @@ GET /store/my-orders
     "products": [
       {
         "id": "uuid",
-        "name": "Produto",
+        "name": "Product",
         "price": 50.00,
         "stock": 98
       }
@@ -420,25 +420,25 @@ GET /store/my-orders
 
 ---
 
-## 💸 Endpoints de Empréstimos
+## 💸 Loan Endpoints
 
-### Criar Empresa Parceira
-**Requer:** Role `ADMIN`
+### Create Partner Company
+**Requires:** Role `ADMIN`
 
 ```http
-POST /loans/admin/companies?name=Empresa&email=empresa@example.com
+POST /loans/admin/companies?name=Company&email=company@example.com
 ```
 
 **Response:** `200 OK`
 ```json
 {
   "id": "uuid",
-  "name": "Empresa",
-  "email": "empresa@example.com"
+  "name": "Company",
+  "email": "company@example.com"
 }
 ```
 
-### Solicitar Empréstimo
+### Request Loan
 ```http
 POST /loans/create?companyId=uuid&amount=1000&installments=12
 ```
@@ -448,7 +448,7 @@ POST /loans/create?companyId=uuid&amount=1000&installments=12
 {
   "id": "uuid",
   "userId": "uuid",
-  "companyName": "Empresa",
+  "companyName": "Company",
   "principalAmount": 1000.00,
   "totalAmount": 1100.00,
   "totalInstallments": 12,
@@ -457,7 +457,7 @@ POST /loans/create?companyId=uuid&amount=1000&installments=12
 }
 ```
 
-### Pagar Parcela
+### Pay Installment
 ```http
 POST /loans/pay-installment/{installmentId}
 ```
@@ -466,10 +466,10 @@ POST /loans/pay-installment/{installmentId}
 
 ---
 
-## 👑 Endpoints de Administração
+## 👑 Admin Endpoints
 
-### Promover Usuário para Admin
-**Requer:** Role `ADMIN`
+### Promote User to Admin
+**Requires:** Role `ADMIN`
 
 ```http
 PATCH /admin/users/{userId}/promote
@@ -477,8 +477,8 @@ PATCH /admin/users/{userId}/promote
 
 **Response:** `204 No Content`
 
-### Depositar Dinheiro em Conta
-**Requer:** Role `ADMIN`
+### Deposit Money to Account
+**Requires:** Role `ADMIN`
 
 ```http
 POST /admin/transactions/deposit
@@ -487,7 +487,7 @@ POST /admin/transactions/deposit
 **Request Body:**
 ```json
 {
-  "userId": "uuid-do-usuario",
+  "userId": "user_uuid",
   "amount": 500.00
 }
 ```
@@ -496,132 +496,132 @@ POST /admin/transactions/deposit
 
 ---
 
-## 📁 Estrutura do Projeto
+## 📁 Project Structure
 
 ```
 backend/
 ├── src/
 │   ├── main/
 │   │   ├── java/com/trustpay/backend/
-│   │   │   ├── bootstrap/          # Inicialização de dados
-│   │   │   ├── config/             # Configurações (Security, CORS)
-│   │   │   ├── controller/         # Endpoints REST
-│   │   │   │   └── admin/          # Endpoints administrativos
+│   │   │   ├── bootstrap/          # Data initialization
+│   │   │   ├── config/             # Configurations (Security, CORS)
+│   │   │   ├── controller/         # REST endpoints
+│   │   │   │   └── admin/          # Administrative endpoints
 │   │   │   ├── dto/                # Data Transfer Objects
-│   │   │   │   ├── auth/           # DTOs de autenticação
-│   │   │   │   ├── admin/          # DTOs administrativos
-│   │   │   │   └── response/       # DTOs de resposta
-│   │   │   ├── entity/             # Entidades JPA
-│   │   │   ├── enums/              # Enumerações
-│   │   │   ├── exception/          # Exceções customizadas
+│   │   │   │   ├── auth/           # Auth DTOs
+│   │   │   │   ├── admin/          # Admin DTOs
+│   │   │   │   └── response/       # Response DTOs
+│   │   │   ├── entity/             # JPA entities
+│   │   │   ├── enums/              # Enumerations
+│   │   │   ├── exception/          # Custom exceptions
 │   │   │   │   └── handler/        # Global Exception Handler
-│   │   │   ├── pattern/            # Padrões de projeto (Strategy)
-│   │   │   ├── repository/         # Repositórios JPA
-│   │   │   ├── scheduler/          # Tarefas agendadas
-│   │   │   ├── security/           # JWT e configurações de segurança
-│   │   │   └── services/           # Lógica de negócio
-│   │   │       ├── admin/          # Serviços administrativos
-│   │   │       └── impl/           # Implementações de serviços
+│   │   │   ├── pattern/            # Design patterns (Strategy)
+│   │   │   ├── repository/         # JPA repositories
+│   │   │   ├── scheduler/          # Scheduled tasks
+│   │   │   ├── security/           # JWT and security settings
+│   │   │   └── services/           # Business logic
+│   │   │       ├── admin/          # Administrative services
+│   │   │       └── impl/           # Service implementations
 │   │   └── resources/
-│   │       ├── application.properties       # Configurações principais
-│   │       ├── application-dev.properties   # Perfil desenvolvimento
-│   │       └── application-prod.properties  # Perfil produção
+│   │       ├── application.properties       # Main configuration
+│   │       ├── application-dev.properties   # Development profile
+│   │       └── application-prod.properties  # Production profile
 │   └── test/
 └── pom.xml
 ```
 
-## 🎯 Padrões de Projeto
+## 🎯 Design Patterns
 
 ### Strategy Pattern
-Implementado para diferentes métodos de pagamento:
-- `AccountBalancePaymentStrategy` - Pagamento com saldo da conta
-- `CardPaymentStrategy` - Pagamento com cartão
+Implemented for different payment methods:
+- `AccountBalancePaymentStrategy` - Account balance payment
+- `CardPaymentStrategy` - Card payment
 
 ### DTO Pattern
-Separação clara entre entidades de domínio e objetos de transferência:
-- DTOs de Request para entrada de dados
-- DTOs de Response para saída, protegendo informações sensíveis
+Clear separation between domain entities and transfer objects:
+- Request DTOs for input data
+- Response DTOs for output data, protecting sensitive information
 
 ### Repository Pattern
-Abstração da camada de acesso a dados com Spring Data JPA
+Abstraction of the data access layer with Spring Data JPA
 
 ### Service Layer Pattern
-Camada de serviço separada para lógica de negócio
+Service layer separated for business logic
 
-## 🔒 Segurança
+## 🔒 Security
 
-- **JWT Authentication**: Tokens stateless para autenticação
-- **BCrypt**: Hash de senhas
-- **Role-Based Access Control**: Controle de acesso baseado em roles
-- **CORS**: Configurado para permitir apenas origens específicas
-- **Input Validation**: Validação de entrada com Bean Validation
-- **Exception Handling**: Tratamento global de exceções
+- **JWT Authentication**: Stateless tokens for authentication
+- **BCrypt**: Password hashing
+- **Role-Based Access Control**: Role-based access control
+- **CORS**: Configured to allow only specific origins
+- **Input Validation**: Input validation with Bean Validation
+- **Exception Handling**: Global exception handling
 
-## 🐛 Tratamento de Erros
+## 🐛 Error Handling
 
-A API retorna respostas de erro padronizadas:
+The API returns standardized error responses:
 
 ```json
 {
   "error": "ERROR_CODE",
-  "message": "Mensagem descritiva do erro",
+  "message": "Descriptive error message",
   "timestamp": "2026-01-06T10:30:00"
 }
 ```
 
-**Códigos de Erro Comuns:**
-- `EMAIL_ALREADY_EXISTS` - Email já cadastrado (409)
-- `INVALID_CREDENTIALS` - Credenciais inválidas (401)
-- `VALIDATION_ERROR` - Erro de validação (400)
-- `INSUFFICIENT_BALANCE` - Saldo insuficiente (409)
-- `RESOURCE_NOT_FOUND` - Recurso não encontrado (404)
-- `ACCESS_DENIED` - Acesso negado (403)
-- `INSUFFICIENT_STOCK` - Estoque insuficiente (409)
-- `INTERNAL_SERVER_ERROR` - Erro interno do servidor (500)
+**Common Error Codes:**
+- `EMAIL_ALREADY_EXISTS` - Email already registered (409)
+- `INVALID_CREDENTIALS` - Invalid credentials (401)
+- `VALIDATION_ERROR` - Validation error (400)
+- `INSUFFICIENT_BALANCE` - Insufficient balance (409)
+- `RESOURCE_NOT_FOUND` - Resource not found (404)
+- `ACCESS_DENIED` - Access denied (403)
+- `INSUFFICIENT_STOCK` - Insufficient stock (409)
+- `INTERNAL_SERVER_ERROR` - Internal server error (500)
 
-## 🧪 Testando a API
+## 🧪 Testing the API
 
-### Usando cURL
+### Using cURL
 
-**Registrar:**
+**Register:**
 ```bash
 curl -X POST http://localhost:8080/auth/register \
   -H "Content-Type: application/json" \
-  -d '{"email":"user@example.com","password":"senha123"}'
+  -d '{"email":"user@example.com","password":"password123"}'
 ```
 
 **Login:**
 ```bash
 curl -X POST http://localhost:8080/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email":"user@example.com","password":"senha123"}'
+  -d '{"email":"user@example.com","password":"password123"}'
 ```
 
-**Listar produtos (com autenticação):**
+**List products (authenticated):**
 ```bash
 curl -X GET http://localhost:8080/products \
-  -H "Authorization: Bearer SEU_TOKEN_AQUI"
+  -H "Authorization: Bearer YOUR_TOKEN_HERE"
 ```
 
-## 📝 Notas Importantes
+## 📝 Important Notes
 
-1. **Primeiro Login**: Um usuário admin é criado automaticamente na inicialização com as credenciais configuradas nas variáveis de ambiente.
+1. **First Login**: An admin user is created automatically on startup using credentials configured in environment variables.
 
-2. **Segurança em Produção**: 
-   - Altere o `JWT_SECRET` para uma chave forte
-   - Use HTTPS em produção
-   - Configure `spring.jpa.hibernate.ddl-auto=validate` em produção
+2. **Production Security**:
+   - Change `JWT_SECRET` to a strong key
+   - Use HTTPS in production
+   - Set `spring.jpa.hibernate.ddl-auto=validate` in production
 
-3. **CORS**: Ajuste as origens permitidas em [CorsConfig.java](src/main/java/com/trustpay/backend/config/CorsConfig.java) conforme necessário.
+3. **CORS**: Adjust allowed origins in [CorsConfig.java](src/main/java/com/trustpay/backend/config/CorsConfig.java) as needed.
 
-## 👥 Contribuindo
+## 👥 Contributing
 
-Contribuições são bem-vindas! Sinta-se à vontade para abrir issues e pull requests.
+Contributions are welcome! Feel free to open issues and pull requests.
 
-## 📄 Licença
+## 📄 License
 
-Este projeto é um projeto pessoal de demonstração.
+This project is a personal demonstration project.
 
 ---
 
-**Desenvolvido com ❤️ por Miguel Fazio Assunção**
+**Built with ❤️ by Miguel Fazio Assuncao**
