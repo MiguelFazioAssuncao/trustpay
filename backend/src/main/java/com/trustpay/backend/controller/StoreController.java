@@ -4,7 +4,6 @@ import com.trustpay.backend.dto.CheckoutRequest;
 import com.trustpay.backend.dto.response.OrderResponse;
 import com.trustpay.backend.entity.User;
 import com.trustpay.backend.exception.ResourceNotFoundException;
-import com.trustpay.backend.repository.OrderRepository;
 import com.trustpay.backend.repository.UserRepository;
 import com.trustpay.backend.services.StoreService;
 import jakarta.validation.Valid;
@@ -26,7 +25,6 @@ public class StoreController {
 
     private final StoreService storeService;
     private final UserRepository userRepository;
-    private final OrderRepository orderRepository;
 
     @PostMapping("/checkout")
     public ResponseEntity<Void> checkout(
@@ -56,9 +54,7 @@ public class StoreController {
         User user = userRepository.findByEmail(auth.getName())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        return orderRepository.findAllByUserId(user.getId()).stream()
-                .map(OrderResponse::fromEntity)
-                .toList();
+        return storeService.getMyOrders(user.getId());
     }
 
 }

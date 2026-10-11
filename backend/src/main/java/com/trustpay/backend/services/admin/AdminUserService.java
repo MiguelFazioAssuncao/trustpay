@@ -2,6 +2,8 @@ package com.trustpay.backend.services.admin;
 
 import com.trustpay.backend.entity.User;
 import com.trustpay.backend.enums.Role;
+import com.trustpay.backend.exception.ResourceNotFoundException;
+import com.trustpay.backend.exception.UnauthorizedOperationException;
 import com.trustpay.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,11 +20,14 @@ public class AdminUserService {
     @Transactional
     public void promoteToAdmin(UUID userId) {
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByIdForUpdate(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         if (user.getRole() == Role.ADMIN) {
-            throw new RuntimeException("User is already an admin");
+            return;
+        }
+        if (user.getRole() == Role.STORE) {
+            throw new UnauthorizedOperationException("Cannot promote the internal store account");
         }
 
         user.setRole(Role.ADMIN);

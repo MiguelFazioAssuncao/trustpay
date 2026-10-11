@@ -1,54 +1,56 @@
-    package com.trustpay.backend.entity;
+package com.trustpay.backend.entity;
 
-    import com.trustpay.backend.enums.AccountStatus;
-    import com.trustpay.backend.enums.Role;
-    import jakarta.persistence.*;
-    import jakarta.validation.constraints.Email;
-    import jakarta.validation.constraints.NotBlank;
-    import jakarta.validation.constraints.Size;
-    import lombok.AllArgsConstructor;
-    import lombok.Builder;
-    import lombok.Data;
-    import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.trustpay.backend.enums.AccountStatus;
+import com.trustpay.backend.enums.Role;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 
-    import java.math.BigDecimal;
-    import java.util.UUID;
+import java.math.BigDecimal;
+import java.util.UUID;
 
-    @Data
-    @Entity
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Table(name = "users")
-    public class User {
+@Data
+@Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "users")
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.UUID)
-        private UUID id;
+    @NotBlank
+    @Email
+    @Size(max = 100)
+    @Column(unique = true, nullable = false, length = 100)
+    private String email;
 
-        @NotBlank(message = "Email is required")
-        @Email(message = "Please provide a valid email address")
-        @Size(max = 100, message = "Email must be at most 100 characters long")
-        @Column(unique = true, nullable = false)
-        private String email;
+    @NotBlank
+    @Size(max = 60)
+    @JsonIgnore
+    @ToString.Exclude
+    @Column(nullable = false, length = 60)
+    private String password;
 
-        @NotBlank(message = "Password is required")
-        @Size(min = 6, max = 60, message = "Password must between 6 and 60 characters long")
-        @Column(nullable = false)
-        private String password;
+    @Builder.Default
+    @Column(nullable = false, precision = 15, scale = 2)
+    private BigDecimal balance = BigDecimal.ZERO;
 
-    @Column(nullable = false)
-    private BigDecimal balance;
-
-    @Column(nullable = false)
+    @Builder.Default
+    @Column(nullable = false, precision = 15, scale = 2)
     private BigDecimal outstandingBalance = BigDecimal.ZERO;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private AccountStatus status;
+    private AccountStatus status = AccountStatus.ACTIVE;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role;
-
-    }
+    private Role role = Role.USER;
+}

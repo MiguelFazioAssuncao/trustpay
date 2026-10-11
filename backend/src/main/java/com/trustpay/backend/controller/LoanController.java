@@ -1,12 +1,20 @@
 package com.trustpay.backend.controller;
 
+import com.trustpay.backend.dto.response.CompanyResponse;
+import com.trustpay.backend.dto.response.LoanInstallmentResponse;
 import com.trustpay.backend.dto.response.LoanResponse;
-import com.trustpay.backend.entity.Company;
 import com.trustpay.backend.entity.Loan;
 import com.trustpay.backend.entity.User;
-import com.trustpay.backend.repository.CompanyRepository;
+import com.trustpay.backend.exception.ResourceNotFoundException;
 import com.trustpay.backend.repository.UserRepository;
 import com.trustpay.backend.services.LoanService;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,6 +22,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -23,28 +32,25 @@ public class LoanController {
 
     private final LoanService loanService;
     private final UserRepository userRepository;
-    private final CompanyRepository companyRepository;
 
     @PostMapping("/admin/companies")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Company> createCompany(@RequestParam String name, @RequestParam String email) {
-        Company company = companyRepository.save(Company.builder()
-                .name(name)
-                .email(email)
-                .build());
-
-        return ResponseEntity.ok(company);
+    public ResponseEntity<CompanyResponse> createCompany(
+            @RequestParam @NotBlank @Size(max = 100) String name,
+            @RequestParam @NotBlank @Email @Size(max = 100) String email
+    ) {
+        return ResponseEntity.ok(loanService.createCompany(name, email));
     }
 
 
     @PostMapping("/create")
     public ResponseEntity<LoanResponse> createLoan(
             @RequestParam UUID companyId,
-            @RequestParam BigDecimal amount,
-            @RequestParam int installments,
+            @RequestParam @DecimalMin("0.01") @Digits(integer = 13, fraction = 2) BigDecimal amount,
+            @RequestParam @Min(1) @Max(360) int installments,
             Authentication auth
     ) {
-        User user = userRepository.findByEmail(auth.getName()).orElseThrow();
+        User user = currentUser(auth);
         Loan loan = loanService.createLoan(user, companyId, amount, installments);
         return ResponseEntity.ok(LoanResponse.fromEntity(loan));
     }
@@ -55,9 +61,26 @@ public class LoanController {
             @PathVariable UUID id,
             Authentication auth
     ) {
-        User user = userRepository.findByEmail(auth.getName())
-                .orElseThrow();
+        loanService.payInstallment(currentUser(auth), id);
+    }
 
-        loanService.payInstallment(user, id);
+    @GetMapping("/my")
+    public List<LoanResponse> myLoans(Authentication auth) {
+        return loanService.getMyLoans(currentUser(auth));
+    }
+
+    @GetMapping("/{id}/installments")
+    public List<LoanInstallmentResponse> installments(@PathVariable UUID id, Authentication auth) {
+        return loanService.getInstallments(currentUser(auth), id);
+    }
+
+    @GetMapping("/companies")
+    public List<CompanyResponse> companies() {
+        return loanService.getCompanies();
+    }
+
+    private User currentUser(Authentication auth) {
+        return userRepository.findByEmail(auth.getName())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 }

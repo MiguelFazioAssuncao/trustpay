@@ -1,6 +1,7 @@
 package com.trustpay.backend.controller;
 
 import com.trustpay.backend.dto.response.ProductResponse;
+import com.trustpay.backend.dto.CreateProductRequest;
 import com.trustpay.backend.entity.Product;
 import com.trustpay.backend.repository.ProductRepository;
 import jakarta.validation.Valid;
@@ -27,7 +28,9 @@ public class ProductController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ProductResponse> createProduct(@RequestBody @Valid Product product) {
+    public ResponseEntity<ProductResponse> createProduct(@RequestBody @Valid CreateProductRequest request) {
+        Product product = Product.builder().name(request.name().strip()).price(request.price())
+                .stock(request.stock()).build();
         Product savedProduct = productRepository.save(product);
         return ResponseEntity.ok(ProductResponse.fromEntity(savedProduct));
     }

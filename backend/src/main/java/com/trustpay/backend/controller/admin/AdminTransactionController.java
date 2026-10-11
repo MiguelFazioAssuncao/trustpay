@@ -2,6 +2,7 @@ package com.trustpay.backend.controller.admin;
 
 import com.trustpay.backend.dto.admin.DepositRequest;
 import com.trustpay.backend.services.admin.AdminTransactionService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,7 +20,7 @@ public class AdminTransactionController {
     private final AdminTransactionService service;
 
     @PostMapping("/deposit")
-    public ResponseEntity<Void> deposit(@RequestBody DepositRequest request) {
+    public ResponseEntity<Void> deposit(@Valid @RequestBody DepositRequest request) {
         service.deposit(request.userId(), request.amount());
         return ResponseEntity.ok().build();
     }

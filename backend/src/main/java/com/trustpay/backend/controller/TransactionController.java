@@ -3,9 +3,10 @@ package com.trustpay.backend.controller;
 import com.trustpay.backend.dto.TransferRequest;
 import com.trustpay.backend.dto.response.TransactionResponse;
 import com.trustpay.backend.entity.User;
-import com.trustpay.backend.repository.TransactionRepository;
 import com.trustpay.backend.repository.UserRepository;
 import com.trustpay.backend.services.TransactionService;
+import com.trustpay.backend.exception.ResourceNotFoundException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,15 +23,15 @@ public class TransactionController {
 
     private final TransactionService service;
     private final UserRepository userRepository;
-    private final TransactionRepository transactionRepository;
 
     @PostMapping("/transfer")
     public ResponseEntity<Void> transfer(
-            @RequestBody TransferRequest request,
+            @Valid @RequestBody TransferRequest request,
             Authentication authentication
     ) {
         String email = authentication.getName();
-        User user = userRepository.findByEmail(email).orElseThrow();
+        User user = userRepository.findByEmailIgnoreCase(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         service.transfer(user.getId(), request.toUserId(), request.amount());
         return ResponseEntity.ok().build();
@@ -39,10 +40,8 @@ public class TransactionController {
     @GetMapping("/my")
     public List<TransactionResponse> myTransactions(Authentication auth) {
         String email = auth.getName();
-        User user = userRepository.findByEmail(email).orElseThrow();
-
-        return transactionRepository.findByFromUserOrToUser(user, user).stream()
-                .map(TransactionResponse::fromEntity)
-                .toList();
+        User user = userRepository.findByEmailIgnoreCase(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        return service.history(user.getId());
     }
 }

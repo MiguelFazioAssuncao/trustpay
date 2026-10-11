@@ -11,5 +11,6 @@ import java.util.UUID;
 
 public interface TransactionRepository extends JpaRepository<Transaction, UUID> {
     List<Transaction> findByFromUserOrToUser(User from, User to);
+    List<Transaction> findByFromUserOrToUserOrderByCreatedAtDescIdDesc(User from, User to);
     Optional<Transaction> findTop1ByStatusOrderByCreatedAtAsc(TransactionStatus status);
 }

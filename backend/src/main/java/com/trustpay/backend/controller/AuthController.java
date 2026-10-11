@@ -7,6 +7,7 @@ import com.trustpay.backend.dto.response.UserResponse;
 import com.trustpay.backend.entity.User;
 import com.trustpay.backend.repository.UserRepository;
 import com.trustpay.backend.services.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ public class AuthController {
     private final UserRepository userRepository;
 
     @PostMapping("/login")
+    @Operation(summary = "Entrar na conta", security = {})
     public ResponseEntity<AuthResponse> login(
             @Valid @RequestBody LoginRequest loginRequest
     ) {
@@ -29,7 +31,7 @@ public class AuthController {
                 loginRequest.password()
         );
 
-        User user = userRepository.findByEmail(loginRequest.email()).orElseThrow();
+        User user = userRepository.findByEmailIgnoreCase(loginRequest.email()).orElseThrow();
 
         return ResponseEntity.ok(
                 new AuthResponse(
@@ -41,6 +43,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
+    @Operation(summary = "Criar conta", security = {})
     public ResponseEntity<AuthResponse> register(
             @Valid @RequestBody RegisterRequest registerRequest
     ) {
@@ -49,7 +52,7 @@ public class AuthController {
                 registerRequest.password()
         );
 
-        User user = userRepository.findByEmail(registerRequest.email()).orElseThrow();
+        User user = userRepository.findByEmailIgnoreCase(registerRequest.email()).orElseThrow();
 
         return ResponseEntity.ok(
                 new AuthResponse(

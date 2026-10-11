@@ -1,5 +1,6 @@
 package com.trustpay.backend.dto.auth;
 
+import com.trustpay.backend.security.EmailAddress;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -12,6 +13,11 @@ public record LoginRequest(
         String email,
 
         @NotBlank(message = "Password is required")
+        @BcryptPassword
         @Size(min = 6, max = 60, message = "Password must be between 6 and 60 characters")
         String password
-) {}
+) {
+    public LoginRequest {
+        email = EmailAddress.normalize(email);
+    }
+}

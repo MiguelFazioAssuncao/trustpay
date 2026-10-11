@@ -6,6 +6,7 @@ import com.trustpay.backend.enums.Role;
 import com.trustpay.backend.exception.EmailAlreadyExistsException;
 import com.trustpay.backend.repository.UserRepository;
 import com.trustpay.backend.security.JwtService;
+import com.trustpay.backend.security.EmailAddress;
 import com.trustpay.backend.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -26,12 +27,13 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public String login(String email, String password) {
 
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmailIgnoreCase(EmailAddress.normalize(email))
                 .orElseThrow(() ->
                         new BadCredentialsException("Invalid credentials")
                 );
 
-        if (!passwordEncoder.matches(password, user.getPassword())) {
+        if (!passwordEncoder.matches(password, user.getPassword())
+                || user.getStatus() != AccountStatus.ACTIVE || user.getRole() == Role.STORE) {
             throw new BadCredentialsException("Invalid credentials");
         }
 
@@ -48,7 +50,8 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public String register(String email, String password) {
 
-        if (userRepository.existsByEmail(email)) {
+        email = EmailAddress.normalize(email);
+        if (EmailAddress.STORE_EMAIL.equals(email) || userRepository.existsByEmailIgnoreCase(email)) {
             throw new EmailAlreadyExistsException("An account with this email already exists");
         }
 

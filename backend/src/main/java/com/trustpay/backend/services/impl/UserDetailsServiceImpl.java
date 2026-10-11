@@ -2,6 +2,8 @@ package com.trustpay.backend.services.impl;
 
 import com.trustpay.backend.entity.User;
 import com.trustpay.backend.enums.AccountStatus;
+import com.trustpay.backend.enums.Role;
+import com.trustpay.backend.security.EmailAddress;
 import com.trustpay.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,15 +24,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String email)
             throws UsernameNotFoundException {
 
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmailIgnoreCase(EmailAddress.normalize(email))
                 .orElseThrow(() ->
-                        new UsernameNotFoundException("User not found with email: " + email)
+                        new UsernameNotFoundException("User not found")
                 );
 
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
                 user.getPassword(),
-                user.getStatus() == AccountStatus.ACTIVE,
+                user.getStatus() == AccountStatus.ACTIVE && user.getRole() != Role.STORE,
                 true,
                 true,
                 user.getStatus() != AccountStatus.BLOCKED,

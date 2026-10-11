@@ -9,14 +9,18 @@ public record CardResponse(
         UUID id,
         String cardNumber,
         String type,
-        BigDecimal limit
+        BigDecimal limit,
+        BigDecimal usedLimit,
+        BigDecimal availableLimit
 ) {
     public static CardResponse fromEntity(Card card) {
         return new CardResponse(
                 card.getId(),
                 maskCardNumber(card.getCardNumber()),
-                card.getType(),
-                card.getLimit()
+                card.getType().name(),
+                card.getLimit(),
+                card.getUsedLimit(),
+                card.getAvailableLimit()
         );
     }
 
