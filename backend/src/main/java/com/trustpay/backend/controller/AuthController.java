@@ -22,7 +22,7 @@ public class AuthController {
     private final UserRepository userRepository;
 
     @PostMapping("/login")
-    @Operation(summary = "Entrar na conta", security = {})
+    @Operation(summary = "Sign in to an account", security = {})
     public ResponseEntity<AuthResponse> login(
             @Valid @RequestBody LoginRequest loginRequest
     ) {
@@ -43,7 +43,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    @Operation(summary = "Criar conta", security = {})
+    @Operation(summary = "Create an account", security = {})
     public ResponseEntity<AuthResponse> register(
             @Valid @RequestBody RegisterRequest registerRequest
     ) {

@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
         info = @Info(
                 title = "TrustPay API",
                 version = "1.0.0",
-                description = "API REST de contas, transações, cartões, empréstimos e loja."
+                description = "REST API for accounts, transactions, cards, loans, and the store."
         ),
         security = @SecurityRequirement(name = "bearerAuth")
 )

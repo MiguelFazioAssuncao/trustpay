@@ -1,27 +1,27 @@
 package com.trustpay.backend.services;
 
 /**
- * Serviço responsável por gerenciar autenticação e registro de usuários.
+ * Manages user authentication and registration.
  */
 public interface AuthService {
 
     /**
-     * Autentica um usuário com email e senha.
+     * Authenticates a user with an email and password.
      *
-     * @param email O email do usuário
-     * @param password A senha do usuário
-     * @return Token JWT para autenticação
-     * @throws org.springframework.security.authentication.BadCredentialsException Se as credenciais forem inválidas
+     * @param email the user's email
+     * @param password the user's password
+     * @return JWT authentication token
+     * @throws org.springframework.security.authentication.BadCredentialsException if the credentials are invalid
      */
     String login(String email, String password);
 
     /**
-     * Registra um novo usuário no sistema.
+     * Registers a new user in the system.
      *
-     * @param email O email do novo usuário (deve ser único)
-     * @param password A senha do novo usuário
-     * @return Token JWT para o novo usuário autenticado
-     * @throws org.springframework.dao.DataIntegrityViolationException Se o email já estiver em uso
+     * @param email the new user's email (must be unique)
+     * @param password the new user's password
+     * @return JWT token for the newly authenticated user
+     * @throws org.springframework.dao.DataIntegrityViolationException if the email is already in use
      */
     String register(String email, String password);
 }
